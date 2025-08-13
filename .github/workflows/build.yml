@@ -24,7 +24,7 @@ jobs:
           cache-on-failure: true
 
       - name: Build (release)
-        run: cargo build --locked --release
+        run: cargo build --release
 
       - name: Upload artifact (k7s linux x86_64)
         uses: actions/upload-artifact@v4
