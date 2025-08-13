@@ -1,0 +1,36 @@
+name: Build Linux Binary
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo and target
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: Build (release)
+        run: cargo build --locked --release
+
+      - name: Upload artifact (k7s linux x86_64)
+        uses: actions/upload-artifact@v4
+        with:
+          name: k7s-linux-x86_64
+          path: target/release/k7s
+          if-no-files-found: error
+          retention-days: 7
+
